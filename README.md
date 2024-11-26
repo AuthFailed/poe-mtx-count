@@ -34,7 +34,11 @@ A Chrome extension that helps Path of Exile players track their total spending a
    cd poe-transaction-calculator
    ```
 
-2. **Load in Chrome**
+   or just click on link:
+   [Download](https://github.com/AuthFailed/poe-mtx-count/releases/latest/download/poe-mtx-count.7z)
+   
+
+3. **Load in Chrome**
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right corner
    - Click "Load unpacked" button
