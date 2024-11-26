@@ -6,7 +6,6 @@ A Chrome extension that helps Path of Exile players track their total spending a
 
 <div align="center">
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-Extension-red.svg)](https://chrome.google.com/webstore)
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
@@ -97,7 +96,7 @@ poe-transaction-calculator/
 
 - [Path of Exile](https://www.pathofexile.com/) for the amazing game
 - Grinding Gear Games for the transaction data structure
-- The POE community for inspiration and support
+- [DanielTaranger](https://github.com/DanielTaranger) for the idea
 
 ## 📬 Contact
 
