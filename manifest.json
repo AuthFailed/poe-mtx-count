@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "PoE Transaction Calculator",
+  "version": "1.0",
+  "description": "Calculates total spent on Path of Exile microtransactions",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.pathofexile.com/my-account/transactions"],
+      "js": ["popup.js"]
+    }
+  ]
+}
