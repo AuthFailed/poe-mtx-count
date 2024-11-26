@@ -2,13 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         const currentUrl = tabs[0].url;
         const redirectMessage = document.getElementById('redirectMessage');
-        const transactionList = document.getElementById('transactionList');
+        const mainContent = document.getElementById('mainContent');
 
         if (!currentUrl.includes('pathofexile.com/my-account/transactions')) {
-            redirectMessage.style.display = 'block';
-            transactionList.style.display = 'none';
+            redirectMessage.style.display = 'flex';
+            mainContent.style.display = 'none';
             return;
         }
+
+        redirectMessage.style.display = 'none';
+        mainContent.style.display = 'block';
 
         // Execute content script
         chrome.scripting.executeScript({
@@ -17,12 +20,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then((results) => {
             if (results && results[0]) {
                 displayTransactions(results[0].result);
+                setupCopyButton(results[0].result);
             }
         }).catch((err) => {
             console.error('Failed to execute script:', err);
         });
     });
 });
+
+function setupCopyButton(data) {
+    const copyButton = document.getElementById('copyButton');
+
+    copyButton.addEventListener('click', () => {
+        let clipboardText = 'Path of Exile Transaction Summary\n';
+        clipboardText += '================================\n\n';
+
+        // Add transactions
+        data.transactions.forEach(transaction => {
+            clipboardText += `${transaction.name}: $${transaction.price}\n`;
+        });
+
+        clipboardText += '\n================================\n';
+        clipboardText += `Total spent: $${data.total}\n`;
+
+        // Add POE2 access status
+        const POE2_REQUIREMENT = 480;
+        if (data.total >= POE2_REQUIREMENT) {
+            clipboardText += '\n🎉 Qualified for Path of Exile 2 Beta & Early Access!';
+        } else {
+            const remaining = POE2_REQUIREMENT - data.total;
+            clipboardText += `\nNeed $${remaining} more for Path of Exile 2 Beta & Early Access`;
+        }
+
+        // If there are unrecognized items
+        if (data.notFound.length > 0) {
+            clipboardText += '\n\nUnrecognized items:\n';
+            clipboardText += data.notFound.join('\n');
+        }
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(clipboardText).then(() => {
+            showNotification();
+        });
+    });
+}
+
+function showNotification() {
+    const notification = document.getElementById('notification');
+    notification.classList.add('show');
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 2000);
+}
 
 // This function will be injected into the page
 function analyzeTransactions() {

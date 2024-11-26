@@ -9,14 +9,24 @@
 <div class="header">
     <h1>PoE Transaction Calculator</h1>
 </div>
-<div id="content">
-    <div id="redirectMessage" class="redirect-message" style="display: none;">
-        <p>Please visit <a href="https://www.pathofexile.com/my-account/transactions" target="_blank">Path of Exile Transactions</a> to see your transaction history.</p>
-    </div>
+
+<div id="redirectMessage" class="redirect-container">
+    <div class="redirect-icon">🏰</div>
+    <h2 class="redirect-title">Welcome, Exile!</h2>
+    <p>To check your transaction history, visit:</p>
+    <a href="https://www.pathofexile.com/my-account/transactions" target="_blank" class="redirect-link">
+        Path of Exile Transactions
+    </a>
+</div>
+
+<div id="mainContent">
     <div class="transaction-list" id="transactionList"></div>
     <div class="total" id="total"></div>
     <div id="poe2Tracker" class="poe2-tracker"></div>
     <div id="notFound"></div>
+    <button id="copyButton" class="copy-button">Copy Transaction List</button>
 </div>
+
+<div id="notification" class="notification">Copied to clipboard!</div>
 </body>
 </html>
