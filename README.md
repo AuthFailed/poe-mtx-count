@@ -41,8 +41,6 @@ A Chrome extension that helps Path of Exile players track their total spending a
    - Click "Load unpacked" button
    - Select the extension directory
 
-   ![Installation Guide](https://i.imgur.com/placeholder2.png)
-
 ## 📖 Usage
 
 1. Install the extension
