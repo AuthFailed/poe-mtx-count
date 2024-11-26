@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // This function will be injected into the page
 function analyzeTransactions() {
     const microtransactions = {
+        // PoE2 Early Access - New section
+        "Path of Exile 2 Early Access": 30,
+        "Lord of Ogham": 60,
+        "King of the Faridun": 100,
+        "Thaumaturge of the Vaal": 160,
+        "Warlord of the Karui": 240,
+        "Liberator of Wraeclast": 480,
+
         // Exilecon 2023
         "Exilecon 2023 Ultra VIP": 2000,
         "Exilecon 2023 VIP": 700,
@@ -355,6 +363,7 @@ function analyzeTransactions() {
     const transactions = [];
     let total = 0;
     const notFound = [];
+    let debugLog = [];
 
     const transactionElements = document.querySelectorAll('.transaction');
 
@@ -363,11 +372,13 @@ function analyzeTransactions() {
         if (packageNameElement) {
             const transactionName = packageNameElement.textContent.trim();
             let price = 0;
+            let matchedPack = '';
 
             for (let mtx in microtransactions) {
                 let value = microtransactions[mtx];
                 if (transactionName.includes(mtx) && value > price) {
                     price = value;
+                    matchedPack = mtx;
                 }
             }
 
@@ -375,15 +386,30 @@ function analyzeTransactions() {
                 notFound.push(transactionName);
             }
 
+            const beforeTotal = total;
             total += price;
-            transactions.push({ name: transactionName, price: price });
+
+            // Add to debug log
+            debugLog.push({
+                name: transactionName,
+                matchedPack: matchedPack,
+                price: price,
+                runningTotal: total
+            });
+
+            transactions.push({
+                name: transactionName,
+                price: price,
+                matched: matchedPack || null
+            });
         }
     });
 
     return {
         transactions,
         total,
-        notFound
+        notFound,
+        debugLog
     };
 }
 
@@ -397,34 +423,33 @@ function updatePOE2Tracker(total) {
         trackerElement.classList.add('achieved');
         trackerElement.innerHTML = `
             <div class="poe2-header">
-                <span class="poe2-title">Path of Exile 2 Beta Access</span>
+                <span class="poe2-title">Path of Exile 2 Access Status</span>
                 <span class="poe2-amount">$${total}/$${POE2_BETA_REQUIREMENT}</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: 100%"></div>
             </div>
             <div class="poe2-message achieved-message">
-                🎉 Congratulations! You have already qualified for Path of Exile 2 Beta Access! 🎉
+                🎉 Congratulations! You have qualified for Path of Exile 2 Beta Access & Early Access! 🎉
             </div>
         `;
     } else {
         trackerElement.classList.remove('achieved');
         trackerElement.innerHTML = `
             <div class="poe2-header">
-                <span class="poe2-title">Path of Exile 2 Beta Access Progress</span>
+                <span class="poe2-title">Path of Exile 2 Access Progress</span>
                 <span class="poe2-amount">$${total}/$${POE2_BETA_REQUIREMENT}</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: ${progressPercentage}%"></div>
             </div>
             <div class="poe2-message needed-message">
-                You need $${remaining} more to qualify for Path of Exile 2 Beta Access
+                You need $${remaining} more to qualify for Path of Exile 2 Beta & Early Access
             </div>
         `;
     }
 }
 
-// Update displayTransactions function
 function displayTransactions(data) {
     const transactionList = document.getElementById('transactionList');
     const totalElement = document.getElementById('total');
@@ -435,12 +460,18 @@ function displayTransactions(data) {
     totalElement.innerHTML = '';
     notFoundElement.innerHTML = '';
 
+    // Display debug log in console
+    console.log('Transaction Analysis:', data.debugLog);
+
     // Display transactions
     data.transactions.forEach(transaction => {
         const div = document.createElement('div');
         div.className = 'transaction-item';
         div.innerHTML = `
-            <span class="transaction-name">${transaction.name}</span>
+            <span class="transaction-name">
+                ${transaction.name}
+                ${transaction.matched ? `<span class="matched-pack">(${transaction.matched})</span>` : ''}
+            </span>
             <span class="transaction-price">$${transaction.price}</span>
         `;
         transactionList.appendChild(div);
