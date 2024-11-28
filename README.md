@@ -106,7 +106,7 @@ poe-transaction-calculator/
 
 Roman Chursanov - [@AuthFailed](https://chrsnv.ru)
 
-Project Link: [https://github.com/AuthFailed/poeAccountPrice](github.com/AuthFailed/poeAccountPrice)
+Project Link: [https://github.com/AuthFailed/poeAccountPrice](github.com/AuthFailed/poe-mtx-count)
 
 ---
 <div align="center">
